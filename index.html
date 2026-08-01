@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/styles.css?v=2" />
+  <link rel="stylesheet" href="css/styles.css?v=5" />
 </head>
 <body>
   <!-- CRT / scanline overlay -->
@@ -27,6 +27,11 @@
   <!-- Boot sequence overlay -->
   <div id="boot" class="boot">
     <div class="boot__inner">
+      <div class="boot__art">
+        <img src="assets/cover.png" alt="Let You Down cover art"
+             onerror="this.parentElement.classList.add('is-empty')" />
+        <div class="boot__art-scan"></div>
+      </div>
       <pre class="boot__log" id="boot-log"></pre>
       <div class="boot__bar"><span id="boot-bar-fill"></span></div>
       <div class="boot__hint">[ CLICK TO JACK IN ]</div>
@@ -42,6 +47,7 @@
       <a href="#contact" class="nav__link" data-text="CONTACT">CONTACT</a>
     </nav>
     <div class="nav__status">
+      <button class="nav__sfx" id="sfx-toggle" aria-pressed="true" title="Toggle sound">SFX:ON</button>
       <span class="dot"></span><span id="clock">--:--:--</span>
     </div>
   </header>
@@ -147,12 +153,16 @@
     <span class="footer__mono">// no future but the one we build</span>
   </footer>
 
+  <!-- Background music: drop your track at assets/let-you-down.mp3 -->
+  <audio id="bgm" src="assets/let-you-down.mp3" loop preload="auto"></audio>
+
   <!-- Three.js for the 3D background -->
   <script type="importmap">
     { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
   </script>
   <script type="module" src="js/background.js?v=2"></script>
-  <script src="js/characters.js?v=2"></script>
-  <script src="js/main.js?v=2"></script>
+  <script src="js/characters.js?v=3"></script>
+  <script src="js/audio.js?v=4"></script>
+  <script src="js/main.js?v=6"></script>
 </body>
 </html>

@@ -90,9 +90,32 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   };
   setTimeout(tick, 300);
 
-  const dismiss = () => boot.classList.add('is-done');
-  boot.addEventListener('click', dismiss);
-  setTimeout(dismiss, reduced ? 800 : 6500); // auto-jack-in fallback
+  // jack in only on an explicit click — it doubles as the audio-unlock gesture
+  boot.addEventListener('click', () => {
+    boot.classList.add('is-done');
+    if (window.__startBGM) window.__startBGM();
+  });
+})();
+
+/* ---------- Background music ----------
+   Prefers a real track at assets/let-you-down.mp3; if none exists,
+   falls back to the generative synthwave engine in js/audio.js. */
+(function bgm() {
+  const audio = $('#bgm');
+  let fileReady = false;
+  if (audio) {
+    audio.volume = 0.35;
+    audio.addEventListener('canplaythrough', () => { fileReady = true; }, { once: true });
+  }
+  window.__startBGM = () => {
+    if (window.SFX && SFX.isMuted()) return;
+    if (fileReady) { audio.play().catch(() => {}); }
+    else if (window.BGM) BGM.start();
+  };
+  window.__pauseBGM = () => {
+    if (audio) audio.pause();
+    if (window.BGM) BGM.stop();
+  };
 })();
 
 /* ---------- Render content from CONFIG ---------- */
@@ -159,8 +182,96 @@ function triggerCutIn(text) {
   el.classList.remove('is-active');
   void el.offsetWidth;
   el.classList.add('is-active');
+  if (window.SFX) SFX.stab();
   setTimeout(() => { el.classList.remove('is-active'); _cutBusy = false; }, 980);
 }
+
+/* ---------- Section transitions: glitch wipe + Sandevistan dash ---------- */
+(function sectionFX() {
+  if (reduced) return;
+
+  // slice-wipe overlay
+  const wipe = document.createElement('div');
+  wipe.className = 'wipe';
+  wipe.innerHTML =
+    '<div class="wipe__slice"></div>'.repeat(6) + '<div class="wipe__label"></div>';
+  document.body.appendChild(wipe);
+
+  // sandevistan dash overlay: lead runner + colour-shifted echoes trailing him
+  const sande = document.createElement('div');
+  sande.className = 'sande';
+  const ECHOES = [
+    { c: '#27a55f', o: .18 },  // oldest echo — green
+    { c: '#2fbf71', o: .26 },
+    { c: '#38e08e', o: .34 },
+    { c: '#2fd4e6', o: .45 },
+    { c: '#4ee3f2', o: .58 },
+    { c: '#7ef7ff', o: .72 },  // freshest echo — cyan
+  ];
+  sande.innerHTML =
+    '<div class="sande__tint"></div><div class="sande__lines"></div>' +
+    ECHOES.map((g, i) =>
+      `<div class="sande__ghost" style="--d:${((ECHOES.length - i) * 0.045).toFixed(3)}s;opacity:${g.o}">
+        ${window.makeRunner ? window.makeRunner({ mono: g.c }) : ''}
+      </div>`).join('') +
+    `<div class="sande__ghost sande__ghost--lead">${window.makeRunner ? window.makeRunner({}) : ''}</div>
+    <div class="sande__label"></div>`;
+  document.body.appendChild(sande);
+
+  const nameOf = (sec) => {
+    const idx = $('.section__index', sec)?.textContent || '00';
+    const title = $('.section__title', sec)?.textContent || 'HOME';
+    return `${idx} // ${title}`;
+  };
+
+  let current = null, busy = false, flip = 0;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting || en.target.id === current) return;
+      const first = current === null;
+      current = en.target.id;
+      if (first || busy || _cutBusy) return; // skip on load, mid-effect, or over a cut-in
+      busy = true;
+      const useDash = flip++ % 2 === 0; // alternate: dash, wipe, dash…
+      const el = useDash ? sande : wipe;
+      $(useDash ? '.sande__label' : '.wipe__label', el).textContent = nameOf(en.target);
+      el.classList.remove('is-active');
+      void el.offsetWidth;
+      el.classList.add('is-active');
+      if (window.SFX) { if (useDash) SFX.dash(); else SFX.zap(); }
+      screenGlitch();
+      setTimeout(() => { el.classList.remove('is-active'); busy = false; }, useDash ? 1150 : 640);
+    });
+  }, { rootMargin: '-45% 0px -45% 0px' }); // fire when a section crosses mid-viewport
+  $$('main .section').forEach((s) => io.observe(s));
+})();
+
+/* ---------- SFX mute toggle + autoplay unlock ---------- */
+(function sfx() {
+  const btn = $('#sfx-toggle');
+  if (!btn || !window.SFX) return;
+  const paint = () => {
+    const m = SFX.isMuted();
+    btn.textContent = m ? 'SFX:OFF' : 'SFX:ON';
+    btn.setAttribute('aria-pressed', String(!m));
+    btn.classList.toggle('is-muted', m);
+  };
+  paint();
+  btn.addEventListener('click', () => {
+    SFX.toggle();
+    paint();
+    if (SFX.isMuted()) {
+      if (window.__pauseBGM) window.__pauseBGM();
+    } else {
+      SFX.stab();
+      // resume music only once past the boot screen
+      if ($('#boot').classList.contains('is-done') && window.__startBGM) window.__startBGM();
+    }
+  });
+  // browsers only allow audio after a gesture — unlock on the first one
+  ['pointerdown', 'keydown', 'touchstart'].forEach((ev) =>
+    window.addEventListener(ev, () => SFX.unlock(), { once: true, passive: true }));
+})();
 
 /* ---------- Typed hero subtitle ---------- */
 (function typed() {

@@ -84,6 +84,75 @@ window.makeFigure = function makeFigure(opts = {}) {
   </svg>`;
 };
 
+/* =========================================================
+   Sprinting figure (side profile, facing right) for the
+   Sandevistan dash transition. Pass a single `mono` colour to
+   get a flat silhouette for the afterimage echoes.
+   ========================================================= */
+window.makeRunner = function makeRunner(opts = {}) {
+  const mono = opts.mono || null;
+  const {
+    id = 'r' + Math.random().toString(36).slice(2, 7),
+    accent = mono || '#00f0ff',
+    jacket = mono || '#fcee0a',
+    dark   = mono || '#0a0e1a',
+    skin   = mono || '#1b2433',
+    visor  = mono || '#00f0ff',
+  } = opts;
+
+  return `
+  <svg class="runner" viewBox="0 0 460 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <defs>
+      <filter id="${id}-g" x="-60%" y="-60%" width="220%" height="220%">
+        <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="${accent}" flood-opacity="0.9"/>
+      </filter>
+    </defs>
+
+    <!-- far arm, swung back-down -->
+    <polyline points="295,118 238,148 252,192" fill="none" stroke="${skin}"
+              stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- back leg, extended behind -->
+    <polyline points="235,202 155,245 82,276" fill="none" stroke="${dark}"
+              stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+    <polygon points="50,262 90,268 88,284 52,278" fill="${dark}" stroke="${accent}" stroke-width="1.6"/>
+
+    <!-- jacket torso, tail whipping behind -->
+    <path d="M310,95 L336,136 L302,206 L236,210 L150,186 L176,160 L236,140 L286,104 Z"
+          fill="${jacket}" stroke="${accent}" stroke-width="2" stroke-opacity="0.8"/>
+    <path d="M236,140 L288,178" stroke="${dark}" stroke-width="2.4" stroke-opacity="0.5" fill="none"/>
+    <path d="M176,160 L150,186" stroke="${accent}" stroke-width="2.4" filter="url(#${id}-g)" fill="none"/>
+
+    <!-- front leg, driving forward -->
+    <polyline points="248,204 318,228 302,290" fill="none" stroke="${dark}"
+              stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+    <polygon points="292,282 334,290 332,304 290,298" fill="${dark}" stroke="${accent}" stroke-width="1.6"/>
+
+    <!-- neck + head -->
+    <path d="M306,96 L322,110 L308,122 L296,108 Z" fill="${skin}"/>
+    <circle cx="332" cy="72" r="22" fill="${skin}"/>
+
+    <!-- hair, blown back -->
+    <path d="M352,58 L342,36 L322,50 L306,26 L294,52 L270,36 L268,62 L246,54 L262,76 L300,92 L340,88 Z"
+          fill="${dark}" stroke="${accent}" stroke-width="1.6" stroke-opacity="0.85"/>
+    <polyline points="306,26 302,48" fill="none" stroke="${accent}" stroke-width="2.6" stroke-linecap="round" filter="url(#${id}-g)"/>
+    <polyline points="270,36 276,56" fill="none" stroke="${accent}" stroke-width="2.6" stroke-linecap="round" filter="url(#${id}-g)"/>
+
+    <!-- visor eye -->
+    <polygon class="fig-visor" points="340,64 357,66 356,77 339,75" fill="${visor}" filter="url(#${id}-g)"/>
+
+    <!-- lead arm, pumping forward -->
+    <polyline points="304,118 336,156 362,128" fill="none" stroke="${skin}"
+              stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="364" cy="126" r="8" fill="${skin}" stroke="${accent}" stroke-width="1.4"/>
+
+    <!-- spine implant sparks (the sandevistan itself) -->
+    <circle cx="288" cy="120" r="3" fill="${accent}" filter="url(#${id}-g)"/>
+    <circle cx="272" cy="134" r="2.4" fill="${accent}" filter="url(#${id}-g)"/>
+    <circle cx="258" cy="147" r="2" fill="${accent}" filter="url(#${id}-g)"/>
+  </svg>`;
+};
+
 /* Two ready-made colourways for the hero frames + cut-in */
 window.FIGURE_VARIANTS = [
   { accent: '#00f0ff', glow: '#00f0ff', visor: '#fcee0a' }, // cyan / yellow
