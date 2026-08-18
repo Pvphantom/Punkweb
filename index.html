@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/styles.css?v=5" />
+  <link rel="stylesheet" href="css/styles.css?v=8" />
 </head>
 <body>
   <!-- CRT / scanline overlay -->
@@ -43,6 +43,7 @@
     <a href="#hero" class="nav__brand" data-glitch="P//V">P//V</a>
     <nav class="nav__links">
       <a href="#about" class="nav__link" data-text="ABOUT">ABOUT</a>
+      <a href="#experience" class="nav__link" data-text="EXPERIENCE">EXPERIENCE</a>
       <a href="#projects" class="nav__link" data-text="PROJECTS">PROJECTS</a>
       <a href="#contact" class="nav__link" data-text="CONTACT">CONTACT</a>
     </nav>
@@ -110,9 +111,11 @@
             they're alive. I want to be the one building the good version of that.
           </p>
           <p>
-            This is my net — projects, skills, and a way to reach me. Edit the
-            <code>config</code> in <code>js/main.js</code> to make it yours.
+            Right now that means embedded firmware, autonomy stacks, and vision —
+            from ESP32 sensor networks to VLM-driven robot navigation.
           </p>
+
+          <div class="edu" id="education"></div>
         </div>
 
         <div class="about__skills reveal">
@@ -122,10 +125,19 @@
       </div>
     </section>
 
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section experience">
+      <div class="section__head reveal">
+        <span class="section__index">02</span>
+        <h2 class="section__title" data-text="EXPERIENCE">EXPERIENCE</h2>
+      </div>
+      <div class="xp__line" id="experience-timeline"></div>
+    </section>
+
     <!-- PROJECTS -->
     <section id="projects" class="section projects">
       <div class="section__head reveal">
-        <span class="section__index">02</span>
+        <span class="section__index">03</span>
         <h2 class="section__title" data-text="PROJECTS">PROJECTS</h2>
       </div>
       <div class="projects__grid" id="projects-grid"></div>
@@ -134,7 +146,7 @@
     <!-- CONTACT -->
     <section id="contact" class="section contact">
       <div class="section__head reveal">
-        <span class="section__index">03</span>
+        <span class="section__index">04</span>
         <h2 class="section__title" data-text="CONTACT">CONTACT</h2>
       </div>
 
@@ -160,9 +172,9 @@
   <script type="importmap">
     { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
   </script>
-  <script type="module" src="js/background.js?v=2"></script>
+  <script type="module" src="js/background.js?v=3"></script>
   <script src="js/characters.js?v=3"></script>
   <script src="js/audio.js?v=4"></script>
-  <script src="js/main.js?v=6"></script>
+  <script src="js/main.js?v=8"></script>
 </body>
 </html>

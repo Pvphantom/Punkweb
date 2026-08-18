@@ -553,6 +553,132 @@ code { font-family: var(--font-mono); color: var(--yellow); }
 .nav__sfx.is-muted { color: var(--muted); }
 @media (pointer: coarse) { .nav__sfx { cursor: auto; } }
 
+/* ---------- Skills: grouped chips ---------- */
+.skillgrp { margin-bottom: 1.3rem; }
+.skillgrp__label {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em;
+  color: var(--cyan); margin-bottom: .55rem; opacity: .85;
+}
+.skillgrp__chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .03em;
+  color: var(--text); border: 1px solid var(--line); padding: 3px 9px;
+  background: rgba(0,240,255,.04); transition: color .2s, border-color .2s, box-shadow .2s, background .2s;
+}
+.chip:hover { color: var(--yellow); border-color: var(--yellow); box-shadow: var(--glow-y); background: rgba(252,238,10,.06); }
+
+/* ---------- Education block ---------- */
+.edu {
+  margin-top: 1.6rem; padding: 1rem 1.1rem; border-left: 2px solid var(--magenta);
+  background: rgba(255,46,136,.05);
+}
+.edu__school { font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 1.02rem; }
+.edu__degree { color: var(--text); font-size: .92rem; margin: .2rem 0; }
+.edu__dates { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); }
+
+/* ---------- Experience timeline ---------- */
+.xp__line { position: relative; padding-left: 2rem; }
+.xp__line::before {
+  content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px;
+  background: linear-gradient(to bottom, var(--cyan), var(--magenta));
+  box-shadow: var(--glow-c);
+}
+.xp { position: relative; margin-bottom: 1.6rem; }
+.xp__dot {
+  position: absolute; left: -2rem; top: 8px; width: 14px; height: 14px;
+  transform: translateX(0); border: 2px solid var(--cyan); background: var(--bg);
+  box-shadow: var(--glow-c); border-radius: 50%;
+}
+.xp__dot::after {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%;
+  background: var(--yellow); box-shadow: var(--glow-y);
+}
+.xp__card {
+  position: relative; background: var(--panel); border: 1px solid var(--line);
+  padding: 1.3rem 1.5rem; overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 97% 100%, 0 100%);
+  transition: border-color .25s, box-shadow .25s;
+}
+.xp__card:hover { border-color: var(--cyan); box-shadow: var(--glow-c); }
+.xp__top { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: .8rem; }
+.xp__role { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: #fff; }
+.xp__org { color: var(--cyan); font-size: .98rem; font-weight: 600; margin-top: .1rem; }
+.xp__note { color: var(--muted); font-size: .82rem; font-style: italic; margin-top: .15rem; }
+.xp__meta { text-align: right; display: flex; flex-direction: column; gap: .15rem; min-width: max-content; }
+.xp__dates { font-family: var(--font-mono); font-size: .82rem; color: var(--yellow); text-shadow: var(--glow-y); }
+.xp__loc { font-family: var(--font-mono); font-size: .76rem; color: var(--muted); }
+.xp__points { list-style: none; margin: 0 0 1rem; padding: 0; }
+.xp__points li {
+  position: relative; padding-left: 1.2rem; margin-bottom: .55rem;
+  color: var(--text); font-size: .92rem; line-height: 1.55;
+}
+.xp__points li::before {
+  content: '▸'; position: absolute; left: 0; color: var(--magenta); text-shadow: var(--glow-m);
+}
+@media (max-width: 620px) {
+  .xp__top { flex-direction: column; }
+  .xp__meta { text-align: left; }
+}
+
+/* ---------- Project card head (num + date) ---------- */
+.card__head { display: flex; justify-content: space-between; align-items: center; }
+.card__when { font-family: var(--font-mono); color: var(--yellow); font-size: .72rem; text-shadow: var(--glow-y); }
+.card__actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.card__play {
+  font-family: var(--font-display); font-size: .76rem; letter-spacing: .12em;
+  color: var(--magenta); background: transparent; border: 1px solid var(--magenta);
+  padding: .45rem .9rem; cursor: none; transition: color .2s, background .2s, box-shadow .2s;
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 90% 100%, 0 100%);
+}
+.card__play:hover { color: var(--bg); background: var(--magenta); box-shadow: var(--glow-m); }
+@media (pointer: coarse) { .card__play { cursor: auto; } }
+
+/* ---------- Video demo modal (holo-playback) ---------- */
+.vmodal {
+  position: fixed; inset: 0; z-index: 9700; display: none;
+  align-items: center; justify-content: center; padding: 5vh 4vw;
+}
+.vmodal.is-open { display: flex; }
+.vmodal__backdrop {
+  position: absolute; inset: 0; background: rgba(3,4,8,.86);
+  backdrop-filter: blur(4px);
+}
+.vmodal__frame {
+  position: relative; z-index: 1; width: min(1000px, 100%);
+  background: var(--panel); border: 1px solid var(--cyan);
+  box-shadow: var(--glow-c), 0 0 60px rgba(0,240,255,.15);
+  clip-path: polygon(0 0, 100% 0, 100% 94%, 97% 100%, 0 100%);
+  animation: vmodalIn .3s cubic-bezier(.2,.9,.2,1);
+}
+@keyframes vmodalIn { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+.vmodal__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .7rem 1rem; border-bottom: 1px solid var(--line);
+}
+.vmodal__title {
+  font-family: var(--font-display); font-weight: 700; letter-spacing: .1em;
+  color: var(--yellow); text-shadow: var(--glow-y); font-size: .9rem;
+}
+.vmodal__close {
+  font-family: var(--font-mono); font-size: 1rem; color: var(--cyan);
+  background: transparent; border: 1px solid var(--line); width: 30px; height: 30px;
+  cursor: none; transition: color .2s, border-color .2s, box-shadow .2s;
+}
+.vmodal__close:hover { color: var(--magenta); border-color: var(--magenta); box-shadow: var(--glow-m); }
+@media (pointer: coarse) { .vmodal__close { cursor: auto; } }
+.vmodal__stage { position: relative; background: #000; }
+.vmodal__stage video { display: block; width: 100%; max-height: 74vh; background: #000; }
+.vmodal__scan {
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(0,0,0,.14) 4px);
+  mix-blend-mode: multiply; opacity: .5;
+}
+.vmodal__missing {
+  display: none; align-items: center; justify-content: center; text-align: center;
+  min-height: 320px; padding: 2rem;
+  font-family: var(--font-mono); font-size: .9rem; color: var(--yellow);
+}
+
 /* ---------- Reveal animation ---------- */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.is-visible { opacity: 1; transform: none; }

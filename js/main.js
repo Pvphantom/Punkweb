@@ -6,50 +6,105 @@
    ========================================================= */
 const CONFIG = {
   name: 'Pranav Vudumula',
+  location: 'San Ramon, CA',
+
+  education: {
+    school: 'University of Maryland — College Park',
+    degree: 'B.S. Computer Science (ML Track) · Mathematics Major · Robotics Minor',
+    dates: 'Aug 2023 – May 2027',
+  },
 
   // Lines that type out under your name in the hero (cycled)
   typedLines: [
-    'ROBOTICS ENGINEER // IN TRAINING',
-    'EMBEDDED SYSTEMS + SOFTWARE',
-    'BUILDING THE GOOD KIND OF CHROME',
+    'ROBOTICS · AUTONOMY · PERCEPTION',
+    'EMBEDDED C++ // ROS2 // COMPUTER VISION',
+    'BUILDING AGENTS THAT MOVE IN THE REAL WORLD',
   ],
 
-  // About → skill bars  { label, percent }
-  skills: [
-    { name: 'PYTHON',            pct: 88 },
-    { name: 'C / C++ (EMBEDDED)', pct: 80 },
-    { name: 'ROS / ROBOTICS',    pct: 72 },
-    { name: 'JS / WEB',          pct: 70 },
-    { name: 'CAD / 3D PRINTING', pct: 65 },
+  // About → skills, grouped like a loadout screen
+  skillGroups: [
+    { label: 'ROBOTICS / AUTONOMY / PERCEPTION',
+      items: ['ROS2', 'Gazebo', 'PyBullet', 'ESP32', 'Path Planning (A*, APF)', 'Inverse Kinematics', 'Sensor Fusion', 'BLE / TCP', 'OpenCV', 'YOLO', 'SIFT / FLANN', 'ArUco', 'RANSAC'] },
+    { label: 'AI / ML',
+      items: ['PyTorch', 'TensorFlow', 'Scikit-Learn', 'VLM', 'Graph Neural Nets', 'LLM Agents', 'RAG'] },
+    { label: 'LANGUAGES',
+      items: ['C++', 'Python', 'Java', 'C', 'JS / TS', 'SQL', 'OCaml'] },
+    { label: 'CLOUD / DEVOPS / TOOLS',
+      items: ['AWS (S3)', 'GCP (Vertex AI, BigQuery)', 'Docker', 'CI/CD', 'GitHub Actions', 'Linux', 'React', 'FastAPI', 'Flask', 'Pandas', 'NumPy', 'SciPy'] },
   ],
 
-  // Projects  { num, title, desc, tags[], link }
+  // Experience  { role, org, note?, loc, dates, points[], tags[] }
+  experience: [
+    {
+      role: 'Undergraduate Research Assistant',
+      org: 'University of Maryland — Project Agentic Tangibles',
+      note: 'Faculty-supervised robotics research, with PhD researcher',
+      loc: 'College Park, MD',
+      dates: 'Summer 2026 – Present',
+      points: [
+        "Calibrated and debugged a BNO055 IMU orientation/face-detection system under real deployment conditions — engineered hysteresis dead zones and debounce logic to filter sensor noise and eliminate false state transitions from an off-axis mount.",
+        "Engineered embedded C++ firmware (ESP32-S2) for a multi-node sensor network: persistent TCP streaming at 5Hz, OTA updates via ArduinoOTA, and NVS-backed device identity for fleet-wide firmware pushes.",
+        "Designed a thread-safe Python data-collection server and an LLM command-dispatch pipeline constrained to a whitelisted JSON schema, preventing hallucinated commands from reaching hardware — targeting a CHI 2027 co-authorship.",
+      ],
+      tags: ['ESP32', 'C++', 'IMU', 'LLM', 'Python'],
+    },
+    {
+      role: 'Software Engineer Intern',
+      org: 'Socratics.ai',
+      loc: 'San Francisco, CA',
+      dates: 'May 2025 – Aug 2025',
+      points: [
+        "Architected an LLM-based assessment platform (Gemini, RAG over a 1,000+ question bank) and scalable ETL / vector-search pipelines processing 5M+ records at sub-200ms latency, cutting manual grading effort by 60%.",
+        "Built CI/CD workflows with GitHub Actions and Docker on GCP Vertex AI, scaling to 10,000+ monthly sessions with a sub-5% rollback rate while increasing release velocity by 25%.",
+        "Owned features end-to-end through code review, on-call rotations, and agile sprints — design through production deployment.",
+      ],
+      tags: ['Gemini', 'RAG', 'GCP Vertex AI', 'Docker', 'CI/CD'],
+    },
+    {
+      role: 'Data Science Intern',
+      org: 'Tetra Science',
+      loc: 'Remote',
+      dates: 'Jun 2024 – Aug 2024',
+      points: [
+        "Refactored Python automation scripts for scientific data pipelines and resolved failing end-to-end tests — reliability +30%, test coverage +20%, CI/CD failures −40%.",
+        "Developed a manifest-update tool automating artifact compatibility for 80+ assets, saving the engineering team 15+ hours per week while ensuring 100% data-integrity compliance.",
+      ],
+      tags: ['Python', 'Data Pipelines', 'Testing', 'CI/CD'],
+    },
+  ],
+
+  // Projects  { title, when, desc, tags[], link }
   projects: [
     {
-      title: 'Autonomous Rover',
-      desc: 'A differential-drive robot with obstacle avoidance and SLAM. Replace with your real build.',
-      tags: ['ROS', 'LIDAR', 'PYTHON'],
-      link: '#',
+      title: 'Embodied Reasoning Agent — VLM Robot Navigation',
+      when: 'Summer 2026',
+      desc: "A differential-drive robot that perceives through an onboard camera, reasons with a vision-language model (GPT-4o), and executes motor commands in a closed perceive-reason-act loop. Split classical vs. learning-based methods — deterministic closed-loop primitives for low-level motion, the VLM for high-level planning — with live visualization + MP4 inspection.",
+      tags: ['Python', 'PyBullet', 'GPT-4o', 'VLM'],
+      link: 'https://github.com/Pvphantom',
     },
     {
-      title: 'Robotic Arm Controller',
-      desc: 'Inverse-kinematics control of a 6-DOF arm over serial. Swap in your own project.',
-      tags: ['C++', 'KINEMATICS', 'STM32'],
-      link: '#',
+      title: 'Autonomous Navigation Controller (TurtleBot4)',
+      when: 'Spring 2026',
+      desc: "An Attractive + Repulsive Potential Field (APF) navigation controller for a simulated TurtleBot4 with tunable gains and dynamic goal-seeking. Built a ROS2 analysis pipeline (rosbags) to align optical-flow signals across sensor streams; fully containerized with Docker for reproducible builds.",
+      tags: ['ROS2 Jazzy', 'Gazebo', 'Docker', 'Python'],
+      link: 'https://github.com/Pvphantom',
+      video: 'assets/demo-turtlebot.mp4',   // drop your TurtleBot4 demo here
     },
     {
-      title: 'This Site',
-      desc: 'A Three.js + vanilla-JS cyberpunk portfolio. You are looking at it.',
-      tags: ['THREE.JS', 'WEBGL', 'CSS'],
-      link: '#',
+      title: 'Automated Robotic Control & Perception System',
+      when: 'Fall 2025',
+      desc: "A Python control API for a 6-DOF commercial robotic arm with closed-loop ArUco marker detection for autonomous object localization — translating inverse kinematics into validated physical actuation.",
+      tags: ['Python', 'OpenCV', 'Inverse Kinematics', 'ArUco'],
+      link: 'https://github.com/Pvphantom',
+      video: 'assets/demo-arm.mp4',   // drop your 6-DOF arm demo here
     },
   ],
 
   // Contact links  { label, href }
   contact: [
     { label: 'EMAIL',    href: 'mailto:pvudumula@gmail.com' },
-    { label: 'GITHUB',   href: 'https://github.com/' },
-    { label: 'LINKEDIN', href: 'https://linkedin.com/' },
+    { label: 'GITHUB',   href: 'https://github.com/Pvphantom' },
+    { label: 'LINKEDIN', href: 'https://linkedin.com/in/pranav-vudumula' },
   ],
 
   // Resume: put a PDF at this path (or change it). Leave as-is to show a note.
@@ -120,26 +175,69 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- Render content from CONFIG ---------- */
 function render() {
-  // skills
-  $('#skills').innerHTML = CONFIG.skills.map((s) => `
-    <div class="skill" data-pct="${s.pct}">
-      <div class="skill__row"><span class="skill__name">${s.name}</span><span class="skill__pct">${s.pct}%</span></div>
-      <div class="skill__bar"><span class="skill__fill"></span></div>
+  // skills — grouped chips
+  $('#skills').innerHTML = CONFIG.skillGroups.map((g) => `
+    <div class="skillgrp">
+      <div class="skillgrp__label">// ${g.label}</div>
+      <div class="skillgrp__chips">
+        ${g.items.map((it) => `<span class="chip">${it}</span>`).join('')}
+      </div>
     </div>`).join('');
+
+  // experience — vertical timeline
+  const exp = $('#experience-timeline');
+  if (exp) {
+    exp.innerHTML = CONFIG.experience.map((e) => `
+      <article class="xp reveal">
+        <div class="xp__dot"></div>
+        <div class="xp__card">
+          <div class="xp__top">
+            <div>
+              <h3 class="xp__role">${e.role}</h3>
+              <div class="xp__org">${e.org}</div>
+              ${e.note ? `<div class="xp__note">${e.note}</div>` : ''}
+            </div>
+            <div class="xp__meta">
+              <span class="xp__dates">${e.dates}</span>
+              <span class="xp__loc">${e.loc}</span>
+            </div>
+          </div>
+          <ul class="xp__points">
+            ${e.points.map((p) => `<li>${p}</li>`).join('')}
+          </ul>
+          <div class="card__tags">${e.tags.map((t) => `<span class="card__tag">${t}</span>`).join('')}</div>
+        </div>
+      </article>`).join('');
+  }
 
   // projects
   $('#projects-grid').innerHTML = CONFIG.projects.map((p, idx) => `
     <article class="card tilt">
-      <div class="card__num">PRJ_${String(idx + 1).padStart(2, '0')}</div>
+      <div class="card__head">
+        <span class="card__num">PRJ_${String(idx + 1).padStart(2, '0')}</span>
+        ${p.when ? `<span class="card__when">${p.when}</span>` : ''}
+      </div>
       <h3 class="card__title">${p.title}</h3>
       <p class="card__desc">${p.desc}</p>
       <div class="card__tags">${p.tags.map((t) => `<span class="card__tag">${t}</span>`).join('')}</div>
-      <a class="card__link" href="${p.link}" target="_blank" rel="noopener">ACCESS</a>
+      <div class="card__actions">
+        ${p.video ? `<button class="card__play" data-action="video" data-video="${p.video}" data-title="${p.title}">▶ PLAY DEMO</button>` : ''}
+        <a class="card__link" href="${p.link}" target="_blank" rel="noopener">ACCESS</a>
+      </div>
     </article>`).join('');
 
   // contact
   $('#contact-links').innerHTML = CONFIG.contact.map((c) =>
     `<a class="contact__link" href="${c.href}" target="_blank" rel="noopener">${c.label}</a>`).join('');
+
+  // education line in the about panel
+  const edu = $('#education');
+  if (edu && CONFIG.education) {
+    edu.innerHTML = `
+      <div class="edu__school">${CONFIG.education.school}</div>
+      <div class="edu__degree">${CONFIG.education.degree}</div>
+      <div class="edu__dates">${CONFIG.education.dates}</div>`;
+  }
 
   $('#year').textContent = new Date().getFullYear();
 }
@@ -166,6 +264,61 @@ render();
     <div class="cutin__txt"></div>`;
   document.body.appendChild(cut);
 })();
+
+/* ---------- Video demo modal (holo-playback) ---------- */
+(function buildVideoModal() {
+  const m = document.createElement('div');
+  m.className = 'vmodal';
+  m.id = 'vmodal';
+  m.innerHTML = `
+    <div class="vmodal__backdrop" data-close></div>
+    <div class="vmodal__frame">
+      <div class="vmodal__bar">
+        <span class="vmodal__title" id="vmodal-title">DEMO</span>
+        <button class="vmodal__close" data-close aria-label="Close">✕</button>
+      </div>
+      <div class="vmodal__stage">
+        <video id="vmodal-video" controls playsinline preload="metadata"></video>
+        <div class="vmodal__scan"></div>
+        <div class="vmodal__missing" id="vmodal-missing"></div>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+
+  m.addEventListener('click', (e) => { if (e.target.hasAttribute('data-close')) closeVideo(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideo(); });
+})();
+
+function openVideo(src, title) {
+  const m = $('#vmodal');
+  const vid = $('#vmodal-video');
+  const missing = $('#vmodal-missing');
+  $('#vmodal-title').textContent = (title || 'DEMO').toUpperCase();
+  missing.textContent = '';
+  missing.style.display = 'none';
+  vid.style.display = '';
+  vid.src = src;
+  vid.onerror = () => {
+    vid.style.display = 'none';
+    missing.style.display = 'flex';
+    missing.textContent = `⚠ NO VIDEO AT "${src}" — drop the file there and reopen.`;
+  };
+  m.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  const p = vid.play();
+  if (p && p.catch) p.catch(() => {}); // ignore autoplay rejection; controls are visible
+}
+
+function closeVideo() {
+  const m = $('#vmodal');
+  if (!m || !m.classList.contains('is-open')) return;
+  const vid = $('#vmodal-video');
+  vid.pause();
+  vid.removeAttribute('src');
+  vid.load();
+  m.classList.remove('is-open');
+  document.body.style.overflow = '';
+}
 
 /* ---------- Persona-style cut-in trigger ---------- */
 let _cutBusy = false;
@@ -357,18 +510,23 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   const action = btn.dataset.action;
 
-  // shared: glitch the button + pulse the 3D background + cut-in slam
+  // shared: glitch the button + pulse the 3D background
   btn.classList.add('is-firing');
   setTimeout(() => btn.classList.remove('is-firing'), 800);
   if (window.__cyberPulse) window.__cyberPulse();
   screenGlitch();
-  triggerCutIn(btn.textContent.trim().replace(/[▣↗]/g, '').trim());
+  // the big Persona cut-in only for hero/resume CTAs, not the demo player
+  if (action !== 'video') triggerCutIn(btn.textContent.trim().replace(/[▣↗▶]/g, '').trim());
 
   if (action === 'glitch') {
     const target = btn.dataset.target;
     if (target) {
       setTimeout(() => $(target)?.scrollIntoView({ behavior: 'smooth' }), 220);
     }
+  }
+
+  if (action === 'video') {
+    openVideo(btn.dataset.video, btn.dataset.title);
   }
 
   if (action === 'resume') {
