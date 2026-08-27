@@ -10,14 +10,14 @@ const CONFIG = {
 
   education: {
     school: 'University of Maryland — College Park',
-    degree: 'B.S. Computer Science (ML Track) · Mathematics Major · Robotics Minor',
+    degree: 'B.S. Computer Science (ML Track) · Robotics Minor · Statistics Minor',
     dates: 'Aug 2023 – May 2027',
   },
 
   // Lines that type out under your name in the hero (cycled)
   typedLines: [
     'ROBOTICS · AUTONOMY · PERCEPTION',
-    'EMBEDDED C++ // ROS2 // COMPUTER VISION',
+    'PYTHON // ROS2 // COMPUTER VISION',
     'BUILDING AGENTS THAT MOVE IN THE REAL WORLD',
   ],
 
@@ -28,7 +28,7 @@ const CONFIG = {
     { label: 'AI / ML',
       items: ['PyTorch', 'TensorFlow', 'Scikit-Learn', 'VLM', 'Graph Neural Nets', 'LLM Agents', 'RAG'] },
     { label: 'LANGUAGES',
-      items: ['C++', 'Python', 'Java', 'C', 'JS / TS', 'SQL', 'OCaml'] },
+      items: ['Python', 'Java', 'C', 'C++', 'JS / TS', 'SQL', 'OCaml'] },
     { label: 'CLOUD / DEVOPS / TOOLS',
       items: ['AWS (S3)', 'GCP (Vertex AI, BigQuery)', 'Docker', 'CI/CD', 'GitHub Actions', 'Linux', 'React', 'FastAPI', 'Flask', 'Pandas', 'NumPy', 'SciPy'] },
   ],
