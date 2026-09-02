@@ -80,14 +80,22 @@ const CONFIG = {
       when: 'Summer 2026',
       desc: "A differential-drive robot that perceives through an onboard camera, reasons with a vision-language model (GPT-4o), and executes motor commands in a closed perceive-reason-act loop. Split classical vs. learning-based methods — deterministic closed-loop primitives for low-level motion, the VLM for high-level planning — with live visualization + MP4 inspection.",
       tags: ['Python', 'PyBullet', 'GPT-4o', 'VLM'],
-      link: 'https://github.com/Pvphantom',
+      link: 'https://github.com/Pvphantom/embodied-reasoning',
+      video: 'assets/demo-embodied.mp4',
+    },
+    {
+      title: 'Crystal Forge — Quantum Solver Routing',
+      when: 'Bitcamp 2026',
+      desc: "A solver-routing and measurement-planning framework for strongly-correlated electron systems (Fermi–Hubbard, TFIM). An ML classifier (\"CorrMap\") decides whether classical solvers — mean-field, tensor-network — suffice or quantum methods are required; \"QProbe\" then optimizes which quantum measurements to prioritize for maximum information. A unified FastAPI backend drives both a React web app and a Minecraft Fabric mod that renders the lattice in real time.",
+      tags: ['Python', 'PyTorch', 'Qiskit', 'React', 'Minecraft Mod'],
+      link: 'https://github.com/Pvphantom/bitcamp2026-crystal-forge',
     },
     {
       title: 'Autonomous Navigation Controller (TurtleBot4)',
       when: 'Spring 2026',
       desc: "An Attractive + Repulsive Potential Field (APF) navigation controller for a simulated TurtleBot4 with tunable gains and dynamic goal-seeking. Built a ROS2 analysis pipeline (rosbags) to align optical-flow signals across sensor streams; fully containerized with Docker for reproducible builds.",
       tags: ['ROS2 Jazzy', 'Gazebo', 'Docker', 'Python'],
-      link: 'https://github.com/Pvphantom',
+      context: 'ENAE450 · University coursework',
       video: 'assets/demo-turtlebot.mp4',   // drop your TurtleBot4 demo here
     },
     {
@@ -95,7 +103,7 @@ const CONFIG = {
       when: 'Fall 2025',
       desc: "A Python control API for a 6-DOF commercial robotic arm with closed-loop ArUco marker detection for autonomous object localization — translating inverse kinematics into validated physical actuation.",
       tags: ['Python', 'OpenCV', 'Inverse Kinematics', 'ArUco'],
-      link: 'https://github.com/Pvphantom',
+      context: 'University coursework',
       video: 'assets/demo-arm.mp4',   // drop your 6-DOF arm demo here
     },
   ],
@@ -145,32 +153,8 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   };
   setTimeout(tick, 300);
 
-  // jack in only on an explicit click — it doubles as the audio-unlock gesture
-  boot.addEventListener('click', () => {
-    boot.classList.add('is-done');
-    if (window.__startBGM) window.__startBGM();
-  });
-})();
-
-/* ---------- Background music ----------
-   Prefers a real track at assets/let-you-down.mp3; if none exists,
-   falls back to the generative synthwave engine in js/audio.js. */
-(function bgm() {
-  const audio = $('#bgm');
-  let fileReady = false;
-  if (audio) {
-    audio.volume = 0.35;
-    audio.addEventListener('canplaythrough', () => { fileReady = true; }, { once: true });
-  }
-  window.__startBGM = () => {
-    if (window.SFX && SFX.isMuted()) return;
-    if (fileReady) { audio.play().catch(() => {}); }
-    else if (window.BGM) BGM.start();
-  };
-  window.__pauseBGM = () => {
-    if (audio) audio.pause();
-    if (window.BGM) BGM.stop();
-  };
+  // jack in on an explicit click
+  boot.addEventListener('click', () => boot.classList.add('is-done'));
 })();
 
 /* ---------- Render content from CONFIG ---------- */
@@ -222,7 +206,8 @@ function render() {
       <div class="card__tags">${p.tags.map((t) => `<span class="card__tag">${t}</span>`).join('')}</div>
       <div class="card__actions">
         ${p.video ? `<button class="card__play" data-action="video" data-video="${p.video}" data-title="${p.title}">▶ PLAY DEMO</button>` : ''}
-        <a class="card__link" href="${p.link}" target="_blank" rel="noopener">ACCESS</a>
+        ${p.link ? `<a class="card__link" href="${p.link}" target="_blank" rel="noopener">ACCESS</a>` : ''}
+        ${p.context ? `<span class="card__context">${p.context}</span>` : ''}
       </div>
     </article>`).join('');
 
@@ -335,7 +320,6 @@ function triggerCutIn(text) {
   el.classList.remove('is-active');
   void el.offsetWidth;
   el.classList.add('is-active');
-  if (window.SFX) SFX.stab();
   setTimeout(() => { el.classList.remove('is-active'); _cutBusy = false; }, 980);
 }
 
@@ -350,7 +334,7 @@ function triggerCutIn(text) {
     '<div class="wipe__slice"></div>'.repeat(6) + '<div class="wipe__label"></div>';
   document.body.appendChild(wipe);
 
-  // sandevistan dash overlay: lead runner + colour-shifted echoes trailing him
+  // sandevistan dash overlay: abstract time-skip streak + colour-shifted echoes
   const sande = document.createElement('div');
   sande.className = 'sande';
   const ECHOES = [
@@ -361,69 +345,99 @@ function triggerCutIn(text) {
     { c: '#4ee3f2', o: .58 },
     { c: '#7ef7ff', o: .72 },  // freshest echo — cyan
   ];
+  // abstract dash glyph: trailing speed-lines + a triple forward chevron
+  const dashGlyph = (c) => `
+    <svg viewBox="0 0 480 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <line x1="0" y1="100" x2="205" y2="100" stroke="${c}" stroke-width="6" stroke-linecap="round"/>
+      <line x1="24" y1="70" x2="185" y2="70" stroke="${c}" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="24" y1="130" x2="185" y2="130" stroke="${c}" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>
+      <path d="M205,52 L262,100 L205,148" fill="none" stroke="${c}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M278,52 L335,100 L278,148" fill="none" stroke="${c}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+      <path d="M351,52 L408,100 L351,148" fill="none" stroke="${c}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+    </svg>`;
   sande.innerHTML =
     '<div class="sande__tint"></div><div class="sande__lines"></div>' +
     ECHOES.map((g, i) =>
       `<div class="sande__ghost" style="--d:${((ECHOES.length - i) * 0.045).toFixed(3)}s;opacity:${g.o}">
-        ${window.makeRunner ? window.makeRunner({ mono: g.c }) : ''}
+        ${dashGlyph(g.c)}
       </div>`).join('') +
-    `<div class="sande__ghost sande__ghost--lead">${window.makeRunner ? window.makeRunner({}) : ''}</div>
+    `<div class="sande__ghost sande__ghost--lead">${dashGlyph('#eafff4')}</div>
     <div class="sande__label"></div>`;
   document.body.appendChild(sande);
 
-  const nameOf = (sec) => {
-    const idx = $('.section__index', sec)?.textContent || '00';
-    const title = $('.section__title', sec)?.textContent || 'HOME';
+  let busy = false, flip = 0;
+  // called by the router on every page switch
+  window.__playTransition = (label) => {
+    if (busy || _cutBusy) return;
+    busy = true;
+    const useDash = flip++ % 2 === 0; // alternate: dash, wipe, dash…
+    const el = useDash ? sande : wipe;
+    $(useDash ? '.sande__label' : '.wipe__label', el).textContent = label || '';
+    el.classList.remove('is-active');
+    void el.offsetWidth;
+    el.classList.add('is-active');
+    screenGlitch();
+    setTimeout(() => { el.classList.remove('is-active'); busy = false; }, useDash ? 1150 : 640);
+  };
+})();
+
+/* ---------- Router: nav switches full-screen views (no long scroll) ---------- */
+(function router() {
+  const VIEWS = ['hero', 'about', 'experience', 'projects'];
+  const sections = {};
+  VIEWS.forEach((id) => { sections[id] = document.getElementById(id); });
+  document.body.classList.add('routing');
+  let current = null;
+
+  // Contact lives at the bottom of every page — scroll to it instead of routing
+  window.__goContact = () =>
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  $$('a[href="#contact"]').forEach((a) =>
+    a.addEventListener('click', (e) => { e.preventDefault(); window.__goContact(); }));
+
+  const revealView = (sec) => {
+    if (!sec) return;
+    $$('.reveal', sec).forEach((el, i) => {
+      el.classList.remove('is-visible');
+      setTimeout(() => el.classList.add('is-visible'), 80 + i * 80);
+    });
+  };
+
+  const viewFromHash = () => {
+    const h = (location.hash || '').replace('#', '').trim();
+    return VIEWS.includes(h) ? h : 'hero';
+  };
+
+  const labelFor = (id) => {
+    if (id === 'hero') return '00 // HOME';
+    const idx = $('.section__index', sections[id])?.textContent || '';
+    const title = $('.section__title', sections[id])?.textContent || id.toUpperCase();
     return `${idx} // ${title}`;
   };
 
-  let current = null, busy = false, flip = 0;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (!en.isIntersecting || en.target.id === current) return;
-      const first = current === null;
-      current = en.target.id;
-      if (first || busy || _cutBusy) return; // skip on load, mid-effect, or over a cut-in
-      busy = true;
-      const useDash = flip++ % 2 === 0; // alternate: dash, wipe, dash…
-      const el = useDash ? sande : wipe;
-      $(useDash ? '.sande__label' : '.wipe__label', el).textContent = nameOf(en.target);
-      el.classList.remove('is-active');
-      void el.offsetWidth;
-      el.classList.add('is-active');
-      if (window.SFX) { if (useDash) SFX.dash(); else SFX.zap(); }
-      screenGlitch();
-      setTimeout(() => { el.classList.remove('is-active'); busy = false; }, useDash ? 1150 : 640);
-    });
-  }, { rootMargin: '-45% 0px -45% 0px' }); // fire when a section crosses mid-viewport
-  $$('main .section').forEach((s) => io.observe(s));
-})();
+  function swap(id) {
+    VIEWS.forEach((v) => sections[v] && sections[v].classList.toggle('view-active', v === id));
+    window.scrollTo(0, 0);
+    $$('.nav__link').forEach((a) =>
+      a.classList.toggle('is-current', a.getAttribute('href') === '#' + id));
+    revealView(sections[id]);
+    current = id;
+  }
 
-/* ---------- SFX mute toggle + autoplay unlock ---------- */
-(function sfx() {
-  const btn = $('#sfx-toggle');
-  if (!btn || !window.SFX) return;
-  const paint = () => {
-    const m = SFX.isMuted();
-    btn.textContent = m ? 'SFX:OFF' : 'SFX:ON';
-    btn.setAttribute('aria-pressed', String(!m));
-    btn.classList.toggle('is-muted', m);
-  };
-  paint();
-  btn.addEventListener('click', () => {
-    SFX.toggle();
-    paint();
-    if (SFX.isMuted()) {
-      if (window.__pauseBGM) window.__pauseBGM();
+  function show(id, animate) {
+    if (!sections[id]) id = 'hero';
+    if (id === current) return;
+    if (animate && !reduced && window.__playTransition) {
+      window.__playTransition(labelFor(id));
+      if (window.__cyberPulse) window.__cyberPulse();
+      setTimeout(() => swap(id), 170); // swap while the overlay covers the change
     } else {
-      SFX.stab();
-      // resume music only once past the boot screen
-      if ($('#boot').classList.contains('is-done') && window.__startBGM) window.__startBGM();
+      swap(id);
     }
-  });
-  // browsers only allow audio after a gesture — unlock on the first one
-  ['pointerdown', 'keydown', 'touchstart'].forEach((ev) =>
-    window.addEventListener(ev, () => SFX.unlock(), { once: true, passive: true }));
+  }
+
+  window.addEventListener('hashchange', () => show(viewFromHash(), true));
+  show(viewFromHash(), false); // initial view, no animation
 })();
 
 /* ---------- Typed hero subtitle ---------- */
@@ -477,23 +491,6 @@ function triggerCutIn(text) {
   });
 })();
 
-/* ---------- Scroll reveal + skill bar fill ---------- */
-(function reveal() {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      en.target.classList.add('is-visible');
-      if (en.target.classList.contains('about__skills')) {
-        $$('.skill', en.target).forEach((s) => {
-          $('.skill__fill', s).style.width = s.dataset.pct + '%';
-        });
-      }
-      io.unobserve(en.target);
-    });
-  }, { threshold: 0.2 });
-  $$('.reveal').forEach((el) => io.observe(el));
-})();
-
 /* ---------- Glitch the hero title on a loop ---------- */
 (function heroGlitch() {
   if (reduced) return;
@@ -510,26 +507,26 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   const action = btn.dataset.action;
 
-  // shared: glitch the button + pulse the 3D background
   btn.classList.add('is-firing');
   setTimeout(() => btn.classList.remove('is-firing'), 800);
-  if (window.__cyberPulse) window.__cyberPulse();
-  screenGlitch();
-  // the big Persona cut-in only for hero/resume CTAs, not the demo player
-  if (action !== 'video') triggerCutIn(btn.textContent.trim().replace(/[▣↗▶]/g, '').trim());
 
+  // hero CTAs navigate between views — the router plays the Sandevistan
   if (action === 'glitch') {
-    const target = btn.dataset.target;
-    if (target) {
-      setTimeout(() => $(target)?.scrollIntoView({ behavior: 'smooth' }), 220);
-    }
+    const target = btn.dataset.target; // e.g. '#projects'
+    if (target === '#contact') { window.__goContact && window.__goContact(); return; }
+    if (target) location.hash = target;
+    return;
   }
 
   if (action === 'video') {
+    if (window.__cyberPulse) window.__cyberPulse();
     openVideo(btn.dataset.video, btn.dataset.title);
+    return;
   }
 
   if (action === 'resume') {
+    screenGlitch();
+    triggerCutIn('RESUME');
     fetch(CONFIG.resumeUrl, { method: 'HEAD' })
       .then((r) => {
         if (r.ok) { window.open(CONFIG.resumeUrl, '_blank'); }
@@ -565,15 +562,33 @@ function toast(msg) {
   el._t = setTimeout(() => { el.style.transition = 'opacity .5s'; el.style.opacity = '0'; }, 3200);
 }
 
-/* ---------- Nav: hide on scroll-down, show on scroll-up ---------- */
-(function nav() {
-  const nav = $('#nav');
-  let last = 0;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    nav.classList.toggle('is-hidden', y > last && y > 200);
-    last = y;
+/* ---------- Header mini music player (Spotify popover) ---------- */
+(function music() {
+  const btn = $('#music-toggle');
+  if (!btn) return;
+  const pop = document.createElement('div');
+  pop.className = 'music-pop';
+  pop.innerHTML = `
+    <div class="music-pop__label">// NOW PLAYING — ON REPEAT</div>
+    <iframe src="https://open.spotify.com/embed/track/1qpGMJi0ippCaMUOs7cz2q?utm_source=generator&theme=0"
+      width="100%" height="80" frameborder="0" loading="lazy"
+      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      title="Spotify player"></iframe>`;
+  document.body.appendChild(pop);
+
+  let open = false;
+  const set = (o) => {
+    open = o;
+    pop.classList.toggle('is-open', o);
+    btn.classList.toggle('is-active', o);
+    btn.setAttribute('aria-expanded', String(o));
+    btn.textContent = o ? '❚❚ MUSIC' : '▶ MUSIC';
+  };
+  btn.addEventListener('click', (e) => { e.stopPropagation(); set(!open); });
+  document.addEventListener('click', (e) => {
+    if (open && !pop.contains(e.target) && e.target !== btn) set(false);
   });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) set(false); });
 })();
 
 /* ---------- Live clock ---------- */

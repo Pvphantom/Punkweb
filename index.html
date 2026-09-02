@@ -3,14 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Pranav Vudumula — robotics, software, and the road to Night City." />
-  <title>PRANAV // NIGHT CITY NET</title>
+  <meta name="description" content="Pranav Vudumula — robotics, autonomy & perception. Embedded firmware, ROS2, computer vision, and VLM-driven robots." />
+  <title>Pranav Vudumula — Robotics Portfolio</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+  <!-- Social share preview (Open Graph + Twitter) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Pranav Vudumula" />
+  <meta property="og:title" content="Pranav Vudumula — Robotics Portfolio" />
+  <meta property="og:description" content="Robotics, autonomy & perception. Embedded firmware, ROS2, computer vision, and VLM-driven robots — with live demos." />
+  <meta property="og:url" content="https://pvphantom.github.io/Punkweb/" />
+  <meta property="og:image" content="https://pvphantom.github.io/Punkweb/assets/og-cover.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pranav Vudumula — Robotics Portfolio" />
+  <meta name="twitter:description" content="Robotics, autonomy & perception — embedded firmware, ROS2, computer vision, VLM-driven robots, with live demos." />
+  <meta name="twitter:image" content="https://pvphantom.github.io/Punkweb/assets/og-cover.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/styles.css?v=8" />
+  <link rel="stylesheet" href="css/styles.css?v=13" />
 </head>
 <body>
   <!-- CRT / scanline overlay -->
@@ -27,11 +44,6 @@
   <!-- Boot sequence overlay -->
   <div id="boot" class="boot">
     <div class="boot__inner">
-      <div class="boot__art">
-        <img src="assets/cover.png" alt="Let You Down cover art"
-             onerror="this.parentElement.classList.add('is-empty')" />
-        <div class="boot__art-scan"></div>
-      </div>
       <pre class="boot__log" id="boot-log"></pre>
       <div class="boot__bar"><span id="boot-bar-fill"></span></div>
       <div class="boot__hint">[ CLICK TO JACK IN ]</div>
@@ -48,7 +60,7 @@
       <a href="#contact" class="nav__link" data-text="CONTACT">CONTACT</a>
     </nav>
     <div class="nav__status">
-      <button class="nav__sfx" id="sfx-toggle" aria-pressed="true" title="Toggle sound">SFX:ON</button>
+      <button class="nav__music" id="music-toggle" aria-expanded="false" title="Play music">▶ MUSIC</button>
       <span class="dot"></span><span id="clock">--:--:--</span>
     </div>
   </header>
@@ -89,7 +101,7 @@
         </figure>
       </div>
 
-      <div class="scroll-hint" aria-hidden="true">SCROLL ▼</div>
+      <a href="#about" class="scroll-hint">ENTER ▾</a>
     </section>
 
     <!-- ABOUT -->
@@ -143,30 +155,26 @@
       <div class="projects__grid" id="projects-grid"></div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section contact">
-      <div class="section__head reveal">
-        <span class="section__index">04</span>
-        <h2 class="section__title" data-text="CONTACT">CONTACT</h2>
-      </div>
-
-      <div class="contact__inner reveal">
-        <p class="contact__line">
-          Got a build, a job, or just want to talk chrome? Send a message down the wire.
-        </p>
-        <div class="contact__links" id="contact-links"></div>
-        <button class="btn btn--primary btn--big" data-action="resume">DOWNLOAD RESUME ▣</button>
-      </div>
-    </section>
   </main>
+
+  <!-- CONTACT — shown at the bottom of every page (not a separate view) -->
+  <section id="contact" class="section contact">
+    <div class="section__head contact__head">
+      <h2 class="section__title" data-text="CONTACT">CONTACT</h2>
+    </div>
+    <div class="contact__inner">
+      <p class="contact__line">
+        Got a build, a job, or just want to talk chrome? Send a message down the wire.
+      </p>
+      <div class="contact__links" id="contact-links"></div>
+      <button class="btn btn--primary btn--big" data-action="resume">DOWNLOAD RESUME ▣</button>
+    </div>
+  </section>
 
   <footer class="footer">
     <span>© <span id="year"></span> PRANAV VUDUMULA</span>
     <span class="footer__mono">// no future but the one we build</span>
   </footer>
-
-  <!-- Background music: drop your track at assets/let-you-down.mp3 -->
-  <audio id="bgm" src="assets/let-you-down.mp3" loop preload="auto"></audio>
 
   <!-- Three.js for the 3D background -->
   <script type="importmap">
@@ -174,7 +182,6 @@
   </script>
   <script type="module" src="js/background.js?v=3"></script>
   <script src="js/characters.js?v=3"></script>
-  <script src="js/audio.js?v=4"></script>
-  <script src="js/main.js?v=9"></script>
+  <script src="js/main.js?v=16"></script>
 </body>
 </html>

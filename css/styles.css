@@ -177,7 +177,18 @@ code { font-family: var(--font-mono); color: var(--yellow); }
   width: 8px; height: 8px; border-radius: 50%; background: var(--yellow);
   box-shadow: var(--glow-y); animation: pulse 1.4s infinite;
 }
-@media (max-width: 620px) { .nav__links { display: none; } }
+/* Nav must stay usable on every width — it's the only way between pages */
+@media (max-width: 680px) {
+  .nav { flex-wrap: wrap; padding: .6rem 1rem; gap: .3rem .9rem; }
+  .nav__brand { font-size: 1.15rem; }
+  .nav__links { order: 3; width: 100%; justify-content: space-between; gap: .6rem; }
+  .nav__link { font-size: .68rem; letter-spacing: .08em; }
+  .nav__status { font-size: .68rem; gap: .4rem; }
+  #clock { display: none; }
+}
+@media (max-width: 380px) {
+  .nav__link { font-size: .6rem; letter-spacing: .04em; }
+}
 
 /* ---------- Hero ---------- */
 .hero {
@@ -334,8 +345,14 @@ code { font-family: var(--font-mono); color: var(--yellow); }
   color: var(--yellow); text-shadow: var(--glow-y);
 }
 .card__link::after { content: ' ↗'; }
+.card__context {
+  font-family: var(--font-mono); font-size: .68rem; letter-spacing: .04em;
+  color: var(--muted); margin-left: auto;
+}
 
-/* ---------- Contact ---------- */
+/* ---------- Contact (bottom band on every page) ---------- */
+.contact { border-top: 1px solid var(--line); padding-top: clamp(2.5rem, 7vh, 5rem); padding-bottom: clamp(2.5rem, 7vh, 5rem); }
+.contact__head { justify-content: center; }
 .contact__inner { text-align: center; max-width: 620px; margin: 0 auto; }
 .contact__line { font-size: 1.2rem; margin-bottom: 1.8rem; color: var(--text); }
 .contact__links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
@@ -345,6 +362,18 @@ code { font-family: var(--font-mono); color: var(--yellow); }
   transition: color .2s, border-color .2s, box-shadow .2s;
 }
 .contact__link:hover { color: var(--magenta); border-color: var(--magenta); box-shadow: var(--glow-m); }
+
+/* ---------- Now playing (Spotify embed) ---------- */
+.nowplaying {
+  margin-top: 2.4rem; padding: 1rem; border: 1px solid var(--line);
+  background: rgba(0,240,255,.04);
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 96% 100%, 0 100%);
+}
+.nowplaying__label {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em;
+  color: var(--cyan); text-align: left; margin-bottom: .7rem; opacity: .85;
+}
+.nowplaying__frame { display: block; border-radius: 12px; }
 
 /* ---------- Footer ---------- */
 .footer {
@@ -511,13 +540,13 @@ code { font-family: var(--font-mono); color: var(--yellow); }
   100% { opacity: 0; transform: translateX(-8%); }
 }
 .sande__ghost {
-  position: absolute; left: 0; bottom: 8%;
-  width: clamp(280px, 42vw, 620px);
+  position: absolute; left: 0; top: 46%;
+  width: clamp(300px, 46vw, 680px);
   transform: translateX(-120%);
   will-change: transform;
   filter: drop-shadow(0 0 16px rgba(0, 255, 140, .5));
 }
-.sande__ghost--lead { filter: drop-shadow(0 0 22px rgba(252, 238, 10, .45)); }
+.sande__ghost--lead { filter: drop-shadow(0 0 22px rgba(0, 255, 170, .6)); }
 .sande.is-active .sande__ghost {
   animation: sandeRun .8s cubic-bezier(.33, .05, .6, .95) var(--d, 0s) both;
 }
@@ -552,6 +581,48 @@ code { font-family: var(--font-mono); color: var(--yellow); }
 .nav__sfx:hover { border-color: var(--cyan); box-shadow: var(--glow-c); }
 .nav__sfx.is-muted { color: var(--muted); }
 @media (pointer: coarse) { .nav__sfx { cursor: auto; } }
+
+/* ---------- Routed views: show one page at a time ---------- */
+body.routing main > section { display: none; }
+body.routing main > section.view-active { display: block; min-height: 100vh; }
+body.routing main > section.hero.view-active { display: flex; }
+
+/* current-page highlight in the nav */
+.nav__link.is-current { color: var(--yellow); }
+.nav__link.is-current::after { width: 100%; background: var(--yellow); box-shadow: var(--glow-y); }
+
+/* the hero "ENTER" hint is now a link to About */
+a.scroll-hint { cursor: none; text-decoration: none; transition: color .2s; }
+a.scroll-hint:hover { color: var(--cyan); text-shadow: var(--glow-c); }
+@media (pointer: coarse) { a.scroll-hint { cursor: auto; } }
+
+/* ---------- Header mini music player ---------- */
+.nav__music {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em;
+  background: none; border: 1px solid var(--magenta); color: var(--magenta);
+  padding: 2px 9px; cursor: none; white-space: nowrap;
+  transition: color .2s, background .2s, box-shadow .2s;
+}
+.nav__music:hover, .nav__music.is-active {
+  color: var(--bg); background: var(--magenta); box-shadow: var(--glow-m);
+}
+@media (pointer: coarse) { .nav__music { cursor: auto; } }
+
+.music-pop {
+  position: fixed; top: 58px; right: clamp(1rem, 5vw, 4rem); z-index: 8000;
+  width: min(320px, 84vw); padding: .8rem;
+  background: var(--panel); border: 1px solid var(--magenta);
+  box-shadow: var(--glow-m), 0 0 40px rgba(255,46,136,.15);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 94% 100%, 0 100%);
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+}
+.music-pop.is-open { opacity: 1; visibility: visible; transform: none; }
+.music-pop__label {
+  font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em;
+  color: var(--magenta); margin-bottom: .6rem;
+}
+.music-pop iframe { display: block; border-radius: 12px; }
 
 /* ---------- Skills: grouped chips ---------- */
 .skillgrp { margin-bottom: 1.3rem; }
